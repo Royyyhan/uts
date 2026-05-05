@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/parking_provider.dart';
-import 'screens/splash_screen.dart';
+import 'presentation/providers/parking_provider.dart';
+import 'presentation/screens/splash_screen.dart';
 
 void main() {
   runApp(
