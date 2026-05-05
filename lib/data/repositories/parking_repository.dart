@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import '../../core/storage/local_storage.dart';
 import '../models/parking_model.dart';
+import '../services/parking_service.dart';
 
 class ParkingDataResult {
   final List<ParkingZone> zones;
@@ -11,12 +11,13 @@ class ParkingDataResult {
 }
 
 class ParkingRepository {
-  // For testing, provide a mock api endpoint or fallback to simulated network delay.
-  final String apiUrl = 'https://mockapi.io/projects/your_id/zones'; // Placeholder
+  final ParkingService _service;
+
+  ParkingRepository({ParkingService? service}) : _service = service ?? ParkingService();
 
   Future<ParkingDataResult> getParkingZones() async {
     try {
-      final response = await http.get(Uri.parse(apiUrl)).timeout(const Duration(seconds: 5));
+      final response = await _service.fetchParkingZones();
       
       if (response.statusCode == 200) {
         // Parse data

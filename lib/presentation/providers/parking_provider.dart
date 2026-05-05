@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../data/models/parking_model.dart';
-import '../../data/repositories/parking_repository.dart';
+import '../../domain/usecases/get_parking_zones_usecase.dart';
 
 enum ProviderState { empty, loading, loaded, error }
 
@@ -9,7 +9,7 @@ class ParkingProvider with ChangeNotifier {
   String _errorMessage = '';
   List<ParkingZone> _zones = [];
   bool _isOnlineData = true;
-  final ParkingRepository _repository = ParkingRepository();
+  final GetParkingZonesUseCase _getParkingZonesUseCase = GetParkingZonesUseCase();
 
   ProviderState get state => _state;
   String get errorMessage => _errorMessage;
@@ -25,7 +25,7 @@ class ParkingProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final result = await _repository.getParkingZones();
+      final result = await _getParkingZonesUseCase.execute();
       _zones = result.zones;
       _isOnlineData = result.isOnline;
       _state = _zones.isEmpty ? ProviderState.empty : ProviderState.loaded;
