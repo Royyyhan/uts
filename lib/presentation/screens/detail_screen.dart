@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/parking_model.dart';
+import '../../data/models/parking_model.dart';
 
 class DetailScreen extends StatelessWidget {
   final ParkingZone zone;

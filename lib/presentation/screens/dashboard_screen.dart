@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/parking_provider.dart';
 import 'detail_screen.dart';
-import '../models/parking_model.dart';
+import '../../data/models/parking_model.dart';
+import '../../core/storage/local_storage.dart';
 import 'package:intl/intl.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -27,7 +28,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onPressed: () {
               context.read<ParkingProvider>().fetchData();
             },
-          )
+          ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.person),
+            onSelected: (value) async {
+              if (value == 'save_username') {
+                await LocalStorage.saveUsername('Royhan');
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Username "Royhan" saved to Local Storage')),
+                  );
+                }
+              } else if (value == 'logout') {
+                await LocalStorage.clearAll();
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Logged out, Local Storage cleared')),
+                  );
+                }
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                  value: 'save_username',
+                  child: Text('Save Username'),
+                ),
+                const PopupMenuItem(
+                  value: 'logout',
+                  child: Text('Logout'),
+                ),
+              ];
+            },
+          ),
         ],
       ),
       body: Consumer<ParkingProvider>(
